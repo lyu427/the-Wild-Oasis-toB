@@ -7,12 +7,13 @@ import { useSearchParams } from "react-router-dom";
 import Empty from "../../ui/Empty";
 
 function CabinTable() {
-  const { isLoading, cabins } = useCabins();
+  const { isLoading, cabins } = useCabins(); // 从supabase返回所有cabin
   const [searchParams] = useSearchParams();
 
   if (isLoading) return <Spinner />;
   if (!cabins.length) return <Empty resourceName="cabins" />;
 
+  // 在客户端进行筛选和排序
   // 1) FILTER
   const filterValue = searchParams.get("discount") || "all";
 
@@ -28,7 +29,7 @@ function CabinTable() {
   const [field, direction] = sortBy.split("-");
   const modifier = direction === "asc" ? 1 : -1;
   const sortedCabins = filteredCabins.sort(
-    (a, b) => (a[field] - b[field]) * modifier
+    (a, b) => (a[field] - b[field]) * modifier,
   );
 
   return (

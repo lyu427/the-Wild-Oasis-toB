@@ -11,10 +11,10 @@ export function useLogin() {
     mutationFn: ({ email, password }) => loginApi({ email, password }),
     onSuccess: (user) => {
       queryClient.setQueryData(["user"], user.user);
-      // 这一行将用户存储在React Query的缓存（浏览器的内存）中，只要刷新页面 、 关闭标签页 或者 手动输入 URL 跳转 ，整个 React 应用就会重新启动，内存会被清空，缓存也就随之消失了
+      // 这一行将用户存储在React Query的缓存（浏览器的内存）中，只要刷新页面、关闭标签页或者手动输入 URL 跳转 ，整个 React 应用就会重新启动，内存会被清空，缓存也就随之消失了
       navigate("/dashboard", { replace: true });
     },
-    onError: (err) => {
+    onError: () => {
       toast.error("Provided email or password is not correct");
     },
   });
@@ -22,7 +22,7 @@ export function useLogin() {
   return { login, isLoading };
 }
 
-// ### 2. 既然会消失，为什么还要写这一行？
+// ### 既然会消失，为什么还要写这一行？
 // 这一行代码的主要目的是为了**“丝滑过渡”**：
 
 // - 当用户点击“登录”按钮并成功后，我们 已经 拿到了用户信息。

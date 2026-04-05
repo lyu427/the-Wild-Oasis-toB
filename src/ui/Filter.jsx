@@ -36,7 +36,7 @@ const FilterButton = styled.button`
 `;
 
 function Filter({ filterField, options }) {
-  // options分为value label两个值
+  // options分为value(搜索框的值) label(按钮的值)两个值
   const [searchParams, setSearchParams] = useSearchParams();
   const currentFilter = searchParams.get(filterField) || options.at(0).value; // 默认第一个选项
 

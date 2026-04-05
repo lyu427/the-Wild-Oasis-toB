@@ -72,7 +72,7 @@ function Open({ children, opens: opensWindowName }) {
   const { open } = useContext(ModalContext);
 
   return cloneElement(children, { onClick: () => open(opensWindowName) });
-}
+} // cloneElement可以在不修改子组件源码的情况下，动态地向子组件注入新的Props
 
 function Window({ children, name }) {
   const { openName, close } = useContext(ModalContext);
@@ -83,6 +83,7 @@ function Window({ children, name }) {
   return createPortal(
     <Overlay>
       <StyledModal ref={ref}>
+        {/* React 的自动赋值 ：当你把一个 useRef 创建的对象传给一个原生 HTML 标签时，React 在渲染过程中会自动把这个真实的 DOM 节点地址赋值给 ref.current */}
         <Button onClick={close}>
           <HiXMark />
         </Button>
@@ -90,7 +91,7 @@ function Window({ children, name }) {
         <div>{cloneElement(children, { onCloseModal: close })}</div>
       </StyledModal>
     </Overlay>,
-    document.body
+    document.body,
   );
 }
 

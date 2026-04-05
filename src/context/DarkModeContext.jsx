@@ -9,6 +9,7 @@ function DarkModeProvider({ children }) {
     "isDarkMode",
   );
 
+  // document.documentElement用于直接访问文档的<html>元素
   useEffect(
     function () {
       if (isDarkMode) {

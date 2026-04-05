@@ -32,11 +32,15 @@ export async function login({ email, password }) {
 // 有了 getCurrentUser ：应用启动时会调用它。它会去检查浏览器的 localStorage （Supabase 自动存储在那里的 Token），然后向服务器验证这个 Token 是否依然有效。如果有效，就重新填充缓存，让用户保持登录状态。
 
 export async function getCurrentUser() {
+  // 先验证用户是否已登录，若已登录则获取最新用户数据
   const { data: session } = await supabase.auth.getSession();
   if (!session.session) return null;
+  // 机制 ：Supabase会自动将用户的登录令牌（JWT Token）存储在浏览器的localStorage 中。 getSession()首先会检查本地存储。
+  // 逻辑 ：如果本地没有 Session 或者 Session 已过期，直接返回 null 。这意味着用户当前处于未登录状态。
 
-  // 虽然可以直接从session（对话）中获取用户，但是从supabase中获取更安全
   const { data, error } = await supabase.auth.getUser();
+  // 安全性 ：虽然 session 对象里已经包含了一些用户信息，但 getCurrentUser 会调用 supabase.auth.getUser() 。
+  // 原因 ： getUser() 会向服务器发送请求，通过 JWT 令牌重新从数据库验证用户身份。这是比直接读取本地缓存 更安全 的做法，因为它可以确保用户的权限是最新的（例如：用户是否被禁用，或者元数据是否已更新）。
 
   if (error) throw new Error(error.message);
 
@@ -57,6 +61,7 @@ export async function updateCurrentUser({ password, fullName, avatar }) {
   const { data, error } = await supabase.auth.updateUser(updateData);
   if (error) throw new Error(error.message);
   if (!avatar) return data;
+  // 如果没有传入新的头像文件，函数到此就执行结束并返回结果。这避免了不必要的图片处理逻辑。
 
   // 2. Upload the avatar image
   const fileName = `avatar-${data.user.id}-${Math.random()}`;

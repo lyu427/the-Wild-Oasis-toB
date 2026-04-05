@@ -9,11 +9,13 @@ export async function getBookings({ filter, sortBy, page }) {
 
   // FILTER
   if (filter) query = query[filter.method || "eq"](filter.field, filter.value);
+  // query.eq("status", "unconfirmed")
+  //      .gte("totalPrice",5000);
 
   // SORT
   if (sortBy)
     query = query.order(sortBy.field, {
-      ascending: sortBy.direction === "asc",
+      ascending: sortBy.direction === "asc", // boolean
     });
 
   if (page) {

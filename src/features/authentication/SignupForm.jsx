@@ -17,6 +17,7 @@ function SignupForm() {
       { fullName, email, password },
       {
         onSettled: () => reset(),
+        // 清空表单中所有输入框的值，并将表单的验证状态（如 errors ）恢复到初始状态
       },
     );
   }
@@ -31,7 +32,7 @@ function SignupForm() {
           {...register("fullName", { required: "This field is required" })}
         />
       </FormRow>
-      {/* register 是 React Hook Form 的核心函数，它将这个 <input> 元素 注册 到表单管理系统中。
+      {/* register 是 React Hook Form 的核心函数，它将这个 <input> 元素注册到表单管理系统中。
       命名标识 ：它告诉表单，这个输入框对应的数据字段名为 "fullName" 。当你最终提交表单（ onSubmit ）时，你会得到一个对象 { fullName: "用户输入的值" } 。
       事件绑定 ：它会自动为这个输入框生成必要的事件处理器，比如 onChange （监听输入）、 onBlur （失去焦点验证）等。 */}
       {/* register 函数执行后会返回一个包含多个属性的对象，通过 ... 展开，这些属性被直接应用到了 <input> 标签上 */}

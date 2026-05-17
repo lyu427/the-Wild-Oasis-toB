@@ -6,11 +6,13 @@ export async function getBookings({ filter, sortBy, page }) {
   let query = supabase
     .from("bookings")
     .select("*, cabins(name), guests(fullName, email)", { count: "exact" });
+  // * 表示选择bookings表的所有字段  { count: "exact" }用于获取查询结果的总数
 
   // FILTER
   if (filter) query = query[filter.method || "eq"](filter.field, filter.value);
   // query.eq("status", "unconfirmed")
   //      .gte("totalPrice",5000);
+  // filter.method 为了将来有可能的拓展
 
   // SORT
   if (sortBy)
@@ -18,6 +20,7 @@ export async function getBookings({ filter, sortBy, page }) {
       ascending: sortBy.direction === "asc", // boolean
     });
 
+  // PAGINATION
   if (page) {
     const from = (page - 1) * PAGE_SIZE;
     const to = from + PAGE_SIZE - 1;

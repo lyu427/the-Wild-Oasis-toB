@@ -1,11 +1,13 @@
 import { createContext, useContext, useEffect } from "react";
 import { useLocalStorageState } from "../hooks/useLocalStorageState";
+// 在 src\styles\GlobalStyles.js 中CSS变量通过类选择器切换主题颜色
 
 const DarkModeContext = createContext();
 
 function DarkModeProvider({ children }) {
   const [isDarkMode, setIsDarkMode] = useLocalStorageState(
     window.matchMedia("(prefers-color-scheme: dark)").matches,
+    // 读取系统偏好设置
     "isDarkMode",
   );
 

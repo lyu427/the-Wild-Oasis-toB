@@ -45,10 +45,9 @@ function CabinTable() {
         </Table.Header>
 
         <Table.Body
-          // data={cabins}
-          // data={filteredCabins}
           data={sortedCabins}
           render={(cabin) => <CabinRow cabin={cabin} key={cabin.id} />}
+          // data.map(render)
         />
       </Table>
     </Menus>

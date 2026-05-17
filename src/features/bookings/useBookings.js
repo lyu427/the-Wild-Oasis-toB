@@ -1,9 +1,9 @@
-import { useEffect } from "react";
+// import { useEffect } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { getBookings } from "../../services/apiBookings";
 import { useSearchParams } from "react-router-dom";
 import { PAGE_SIZE } from "../../utils/constants";
-import supabase from "../../services/supabase";
+// import supabase from "../../services/supabase";
 
 export function useBookings() {
   const queryClient = useQueryClient();
@@ -36,25 +36,25 @@ export function useBookings() {
   });
 
   // 通过 Supabase Realtime (底层是 WebSocket) 与 React Query 的联动，实现了“数据库变动 -> 前端自动刷新”的闭环。
-  useEffect(
-    function () {
-      const channel = supabase
-        .channel("bookings-realtime")
-        .on(
-          "postgres_changes",
-          { event: "*", schema: "public", table: "bookings" },
-          function () {
-            queryClient.invalidateQueries({ queryKey: ["bookings"] });
-          },
-        )
-        .subscribe();
+  // useEffect(
+  //   function () {
+  //     const channel = supabase
+  //       .channel("bookings-realtime")
+  //       .on(
+  //         "postgres_changes",
+  //         { event: "*", schema: "public", table: "bookings" },
+  //         function () {
+  //           queryClient.invalidateQueries({ queryKey: ["bookings"] });
+  //         },
+  //       )
+  //       .subscribe();
 
-      return function () {
-        supabase.removeChannel(channel);
-      };
-    },
-    [queryClient],
-  );
+  //     return function () {
+  //       supabase.removeChannel(channel);
+  //     };
+  //   },
+  //   [queryClient],
+  // );
 
   // PRE-FETCHING
   const pageCount = Math.ceil(count / PAGE_SIZE);

@@ -84,6 +84,7 @@ function Menus({ children }) {
 }
 
 function Toggle({ id }) {
+  // 作用：设置position和openId
   const { openId, close, open, setPosition } = useContext(MenusContext);
 
   function handleClick(e) {
@@ -108,7 +109,7 @@ function Toggle({ id }) {
 function List({ id, children }) {
   const { openId, position, close } = useContext(MenusContext);
   const ref = useOutsideClick(close, false);
-
+  // listenCapturing设为false的原因：如果设置为true（捕获阶段），假如在菜单打开时点击toggle按钮，事件在从document向下传递的过程中会先触发List挂载在document上的监听器，关闭菜单。当事件到达Toggle的handleClick时发现当前的openId是空的，会再次把菜单打开，导致菜单关不掉的情况。设置为false时，当需要打开菜单时，事件会先到达Toggle的handleClick，打开菜单，随后在向上传递的过程中触发监听器，发现点击事件在列表的外面，关闭菜单，导致菜单打不开的情况，因此需要在Toggle的handleClick加上e.stopPropagation使得事件在到达Toggle后不再向上传递。同时e.stopPropagation也能使得当父元素也可点击时，点击Toggle时不会触发它的父元素的点击事件。
   if (openId !== id) return null;
 
   return createPortal(
@@ -122,8 +123,8 @@ function List({ id, children }) {
 function Button({ children, icon, onClick }) {
   const { close } = useContext(MenusContext);
 
-  function handleClick() {
-    onClick?.();
+  function handleClick(e) {
+    onClick?.(e);
     close();
   }
 
@@ -137,7 +138,7 @@ function Button({ children, icon, onClick }) {
   );
 }
 
-Menus.Menu = Menu;
+Menus.Menu = Menu; // 起到布局的作用
 Menus.Toggle = Toggle;
 Menus.List = List;
 Menus.Button = Button;

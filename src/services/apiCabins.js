@@ -16,7 +16,7 @@ export async function createEditCabin(newCabin, id) {
 
   const imageName = `${Math.random()}-${newCabin.image.name}`.replaceAll(
     "/",
-    ""
+    "",
   );
   const imagePath = hasImagePath
     ? newCabin.image
@@ -32,6 +32,7 @@ export async function createEditCabin(newCabin, id) {
   if (id) query = query.update({ ...newCabin, image: imagePath }).eq("id", id);
 
   const { data, error } = await query.select().single();
+  // .single 使得获取第一个对象而非数组
 
   if (error) {
     console.error(error);
@@ -40,17 +41,17 @@ export async function createEditCabin(newCabin, id) {
 
   // 2. Upload image
   if (hasImagePath) return data;
-
+  // 上传新图片到 Supabase Storage
   const { error: storageError } = await supabase.storage
     .from("cabin-images")
     .upload(imageName, newCabin.image);
 
-  // 3. Delete the cabin IF there was an error uplaoding image
+  // 3. Delete the cabin IF there was an error uploading image
   if (storageError) {
     await supabase.from("cabins").delete().eq("id", data.id);
     console.error(storageError);
     throw new Error(
-      "Cabin image could not be uploaded and the cabin was not created"
+      "Cabin image could not be uploaded and the cabin was not created",
     );
   }
 

@@ -15,6 +15,8 @@ const NavList = styled.ul`
 `;
 
 const StyledNavLink = styled(NavLink)`
+  // NavLink 是 React Router 提供的导航链接组件
+  // & 符号代表的是父级选择器
   &:link,
   &:visited {
     display: flex;
@@ -30,7 +32,7 @@ const StyledNavLink = styled(NavLink)`
 
   /* This works because react-router places the active class on the active NavLink */
   &:hover,
-  &:active,
+  &:active,  // 只有在正在点击时起作用
   &.active:link,
   &.active:visited {
     color: var(--color-grey-800);

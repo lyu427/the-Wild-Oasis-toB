@@ -63,6 +63,7 @@ const Empty = styled.p`
 const TableContext = createContext();
 
 function Table({ columns, children }) {
+  // columns 是一组长度，例如 columns="0.6fr 2fr 2.4fr 1.4fr 1fr 3.2rem"
   return (
     <TableContext.Provider value={{ columns }}>
       <StyledTable role="table">{children}</StyledTable>

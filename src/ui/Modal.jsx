@@ -70,20 +70,25 @@ function Modal({ children }) {
 
 function Open({ children, opens: opensWindowName }) {
   const { open } = useContext(ModalContext);
+  function handleClick(e) {
+    e.stopPropagation();
+    open(opensWindowName);
+  }
 
-  return cloneElement(children, { onClick: () => open(opensWindowName) });
+  // return cloneElement(children, { onClick: () => open(opensWindowName) });
+  return cloneElement(children, { onClick: handleClick });
 } // cloneElement可以在不修改子组件源码的情况下，动态地向子组件注入新的Props
 
 function Window({ children, name }) {
   const { openName, close } = useContext(ModalContext);
-  const ref = useOutsideClick(close);
+  const ref = useOutsideClick(close, false);
+  // 假如 listenCapturing 被设置为false，也就是事件监听发生在冒泡阶段，那么当打开弹窗后，假如点击事件的位置在弹窗的范围外，就会触发useOutsideClick导致弹窗意外关闭，出现弹窗打不开的情况。至于为什么设置为true不会导致点击到Modal外的打开按钮导致Modal关不掉的情况，是因为我们用z-index很高的Overlay覆盖了整个视口，在Modal外点击时只能点到Overlay，点不到底下的按钮。
 
   if (name !== openName) return null;
 
   return createPortal(
     <Overlay>
       <StyledModal ref={ref}>
-        {/* React 的自动赋值 ：当你把一个 useRef 创建的对象传给一个原生 HTML 标签时，React 在渲染过程中会自动把这个真实的 DOM 节点地址赋值给 ref.current */}
         <Button onClick={close}>
           <HiXMark />
         </Button>

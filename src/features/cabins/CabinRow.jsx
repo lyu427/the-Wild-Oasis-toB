@@ -89,7 +89,6 @@ function CabinRow({ cabin }) {
         <Modal>
           <Menus.Menu>
             <Menus.Toggle id={cabinId} />
-
             <Menus.List id={cabinId}>
               <Menus.Button
                 icon={<HiSquare2Stack />}
@@ -102,7 +101,7 @@ function CabinRow({ cabin }) {
               <Modal.Open opens="edit">
                 <Menus.Button icon={<HiPencil />}>Edit</Menus.Button>
               </Modal.Open>
-
+              {/* Modal.Open中的组件会被注入 onClick: () => open(opensWindowName) */}
               <Modal.Open opens="delete">
                 <Menus.Button icon={<HiTrash />}>Delete</Menus.Button>
               </Modal.Open>
@@ -111,7 +110,7 @@ function CabinRow({ cabin }) {
             <Modal.Window name="edit">
               <CreateCabinForm cabinToEdit={cabin} />
             </Modal.Window>
-
+            {/* Modal.Window中的组件会被注入 onCloseModal: close */}
             <Modal.Window name="delete">
               <ConfirmDelete
                 resourceName="cabins"

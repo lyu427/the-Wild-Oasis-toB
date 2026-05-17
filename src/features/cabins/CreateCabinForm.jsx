@@ -25,8 +25,12 @@ function CreateCabinForm({ cabinToEdit = {}, onCloseModal }) {
 
   function onSubmit(data) {
     const image = typeof data.image === "string" ? data.image : data.image[0];
+    // 编辑一个已存在的木屋时，data.image是一个URL字符串；新建一个木屋时，data.image是一个FileList对象，需要通过data.image[0]拿到真正的File文件。
 
     if (isEditSession)
+      // useMutation 返回的 mutate 函数支持两个参数
+      // 数据对象 - 传给 mutationFn
+      // 选项对象 - 覆盖或扩展 mutation 的配置（如自定义 onSuccess）
       editCabin(
         { newCabinData: { ...data, image }, id: editId },
         {
@@ -34,7 +38,7 @@ function CreateCabinForm({ cabinToEdit = {}, onCloseModal }) {
             reset();
             onCloseModal?.();
           },
-        }
+        },
       );
     else
       createCabin(
@@ -44,7 +48,7 @@ function CreateCabinForm({ cabinToEdit = {}, onCloseModal }) {
             reset();
             onCloseModal?.();
           },
-        }
+        },
       );
   }
 
@@ -55,6 +59,8 @@ function CreateCabinForm({ cabinToEdit = {}, onCloseModal }) {
   return (
     <Form
       onSubmit={handleSubmit(onSubmit, onError)}
+      // 第一个 onSubmit 是Form的属性
+      // 第二个 onSubmit 是27行定义的函数，接收处理后的表单数据
       type={onCloseModal ? "modal" : "regular"}
     >
       <FormRow label="Cabin name" error={errors?.name?.message}>

@@ -44,7 +44,7 @@ function Filter({ filterField, options }) {
     searchParams.set(filterField, value);
     if (searchParams.get("page")) searchParams.set("page", 1);
     // 检查当前 URL 参数中是否存在 page 这个键， 如果有则强制修改为 1
-    // 当切换筛选条件Filter时，强制将分页重置为第一页
+    // 当切换筛选条件时强制将分页重置为第一页
 
     setSearchParams(searchParams);
   }
@@ -53,7 +53,7 @@ function Filter({ filterField, options }) {
     <StyledFilter>
       {options.map((option) => (
         <FilterButton
-          key={option.value}
+          key={option.value} // key 是稳定键，和 map 有关系
           onClick={() => handleClick(option.value)}
           active={option.value === currentFilter}
           disabled={option.value === currentFilter}
